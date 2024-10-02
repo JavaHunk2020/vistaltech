@@ -1,4 +1,4 @@
-package com.boot;
+package com.boot.controller;
 
 import java.util.List;
 
@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.boot.model.Employee;
+import com.boot.service.EmployeeService;
+
 @Controller
 public class AuthController {
 
@@ -16,7 +19,7 @@ public class AuthController {
 	private EmployeeService employeeService;
 
 	// <form action="cauth" method="get">
-	@GetMapping("/cauth")
+	@GetMapping({"/cauth","/"})
 	public String showAuthJsp() {
 		return "auth"; // auth.jsp
 	}

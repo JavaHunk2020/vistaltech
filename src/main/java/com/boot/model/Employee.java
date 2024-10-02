@@ -1,4 +1,4 @@
-package com.boot;
+package com.boot.model;
 
 public class Employee {
 

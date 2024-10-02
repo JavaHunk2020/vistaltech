@@ -1,9 +1,6 @@
-package com.boot;
+package com.boot.controller;
 
-import java.io.IOException;
 import java.util.List;
-
-import javax.servlet.ServletException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,6 +9,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import com.boot.model.Employee;
+import com.boot.service.EmployeeService;
 
 @Controller
 public class SignupController {
@@ -32,8 +32,25 @@ public class SignupController {
 		return "auth";  // auth.jsp
 	}
 	
+	//editEmployee ? email= 
+	@GetMapping("/editEmployee")
+	public String ecditEmployee(String email,Model model) {
+		Employee employee=employeeService.findEmployeeByEmail(email);
+		model.addAttribute("employee", employee);
+		return "esignup";  // esignup.jsp
+	}
 	
-
+	@PostMapping("/updateSignup")
+	public String updateSignup(@ModelAttribute Employee employee,Model model) {
+		employeeService.updateEmployee(employee);
+		System.out.println(employee);
+		model.addAttribute("message", "Employee is updated successfully email = "+employee.getEmail());
+		List<Employee> employees=employeeService.findEmployees();
+		model.addAttribute("employees", employees);
+		return "home";  // esignup.jsp
+	}
+	
+	
 	@GetMapping("/deleteEmployee")
 	public String deleteEmployee(@RequestParam String email,Model model) {
 		employeeService.deleteByEmail(email);

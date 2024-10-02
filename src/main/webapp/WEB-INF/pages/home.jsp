@@ -1,4 +1,4 @@
-<%@page import="com.boot.Employee"%>
+<%@page import="com.boot.model.Employee"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
@@ -61,6 +61,9 @@
         <td>
           <a href="deleteEmployee?email=<%=employee.getEmail() %>">
               <button type="button" class="btn btn-danger">Del!</button>
+         </a>
+          <a href="editEmployee?email=<%=employee.getEmail() %>">
+         <img style="height: 50px;" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTpPZ0xMCp-U6b8XLbvJ9nYq2wJ50MgVz16xQ&s"/>
          </a>
          </td>
       </tr>

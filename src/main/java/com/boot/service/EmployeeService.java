@@ -1,4 +1,4 @@
-package com.boot;
+package com.boot.service;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -7,6 +7,8 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 
 import org.springframework.stereotype.Service;
+
+import com.boot.model.Employee;
 
 @Service
 public class EmployeeService {
@@ -42,6 +44,17 @@ public class EmployeeService {
 		}
 	}
 	
+	public  Employee findEmployeeByEmail(String email){
+		Iterator<Employee> iterator=employees.iterator();
+		while(iterator.hasNext()) {
+			Employee emp=iterator.next();
+			if(emp.getEmail().equalsIgnoreCase(email)) {
+				return emp;
+			}
+		}
+		return null;
+	}
+	
 	public  void addEmployee(Employee employee ) {
 		employees.add(employee);
 	}
@@ -49,5 +62,16 @@ public class EmployeeService {
 	public  List<Employee> findEmployees(){
 		 return employees;
 	}
-
+	
+	public  void updateEmployee(Employee employee){
+		Iterator<Employee> iterator=employees.iterator();
+		while(iterator.hasNext()) {
+			Employee emp=iterator.next();
+			if(emp.getEmail().equalsIgnoreCase(employee.getEmail())) {
+				iterator.remove();
+				break;
+			}
+		}
+		employees.add(employee);
+	}
 }
