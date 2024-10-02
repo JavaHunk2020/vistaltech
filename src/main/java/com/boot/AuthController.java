@@ -1,7 +1,8 @@
 package com.boot;
 
-import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,23 +12,42 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class AuthController {
 
-	//<form action="cauth" method="get">
+	@Autowired
+	private EmployeeService employeeService;
+
+	// <form action="cauth" method="get">
 	@GetMapping("/cauth")
 	public String showAuthJsp() {
-		return "auth";  // auth.jsp
+		return "auth"; // auth.jsp
 	}
-	
-	
-	//<form action="cauth" method="post">
+
 	@PostMapping("/cauth")
-	public String postAuth(@RequestParam String email,@RequestParam String ppassword,Model model) {
-		if("jack@gmail.com".equalsIgnoreCase(email) && "jill".equalsIgnoreCase(ppassword)) {
-			model.addAttribute("message", "Hey! username and password are correct!");
-			return "home";  // home.jsp
-		}else {
-			model.addAttribute("message", "Sorry! username and password are not correct!");
-			return "auth";  // auth.jsp
+	public String postAuth(@RequestParam String email, @RequestParam String ppassword, Model model) {
+		if (!validateEmail(email)) {
+			model.addAttribute("message", "Hey your email is not valid!");
+			return "auth";
 		}
-		
+		Employee employee = new Employee(email, ppassword);
+		if (employeeService.findEmployees().contains(employee)) {
+			model.addAttribute("message", "User is there, Thank you!");
+			// I am setting this messasge inside request scope
+			// so that I can pick it on jsp
+			// loading employee
+			List<Employee> employees = employeeService.findEmployees();
+			// adding into request scope
+			model.addAttribute("employees", employees);
+			return "home";
+		} else {
+			model.addAttribute("message", "User is not there, Sorry!!");
+			// I am setting this messasge inside request scope
+			// so that I can pick it on jsp
+			return "auth";
+		}
 	}
+
+
+	private boolean validateEmail(String input) {
+		return input.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+	}
+
 }

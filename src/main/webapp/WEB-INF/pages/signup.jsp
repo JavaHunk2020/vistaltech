@@ -22,7 +22,7 @@
  <h2 style="background-color: fuchsia;">Signup Page!!!</h2>
  <hr/>
  
-   <form action="signupServlet" method="post">
+   <form action="signup" method="post">
      <div style="width: 50%">
 	   <h5>FirstName :</h5>
 	   <input required="required" type="text" class="form-control" name="firstName"/> 

@@ -1,3 +1,4 @@
+<%@page import="com.boot.Employee"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
@@ -42,8 +43,8 @@
     </thead>
     <tbody>
      <h1>Coming soon!!!!!!!!!!!!!!!!!!!!!!!!!!</h1>
-    <%--  <%
-     
+ 
+     <%
      List<Employee> employeesList=(List<Employee>)request.getAttribute("employees");
      
      if(employeesList==null){
@@ -64,7 +65,7 @@
          </td>
       </tr>
       <%
-      } %> --%>
+      } %> 
      
     </tbody>
   </table>

@@ -31,7 +31,7 @@
 	   <input required="required" type="password" class="form-control"  name="ppassword"/> 
 	   <br/>
 	   <button type="submit" class="btn btn-primary">Validate!</button>
-	   <a href="signup.jsp">
+	   <a href="signup">
 	        <button type="button" class="btn btn-warning">Signup!</button>
 	   </a>
 	   </div>
