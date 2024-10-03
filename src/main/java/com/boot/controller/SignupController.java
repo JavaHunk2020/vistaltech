@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.boot.model.Employee;
+import com.boot.model.EmployeeDTO;
 import com.boot.service.EmployeeService;
 
 @Controller
@@ -26,7 +26,7 @@ public class SignupController {
 	}
 	
 	@PostMapping("/signup")
-	public String postMapping(@ModelAttribute Employee employee,Model model) {
+	public String postMapping(@ModelAttribute EmployeeDTO employee,Model model) {
 		employeeService.addEmployee(employee);
 		model.addAttribute("message","Hey! registration is done");
 		return "auth";  // auth.jsp
@@ -35,17 +35,17 @@ public class SignupController {
 	//editEmployee ? email= 
 	@GetMapping("/editEmployee")
 	public String ecditEmployee(String email,Model model) {
-		Employee employee=employeeService.findEmployeeByEmail(email);
+		EmployeeDTO employee=employeeService.findEmployeeByEmail(email);
 		model.addAttribute("employee", employee);
 		return "esignup";  // esignup.jsp
 	}
 	
 	@PostMapping("/updateSignup")
-	public String updateSignup(@ModelAttribute Employee employee,Model model) {
+	public String updateSignup(@ModelAttribute EmployeeDTO employee,Model model) {
 		employeeService.updateEmployee(employee);
 		System.out.println(employee);
 		model.addAttribute("message", "Employee is updated successfully email = "+employee.getEmail());
-		List<Employee> employees=employeeService.findEmployees();
+		List<EmployeeDTO> employees=employeeService.findEmployees();
 		model.addAttribute("employees", employees);
 		return "home";  // esignup.jsp
 	}
@@ -54,7 +54,7 @@ public class SignupController {
 	@GetMapping("/deleteEmployee")
 	public String deleteEmployee(@RequestParam String email,Model model) {
 		employeeService.deleteByEmail(email);
-		List<Employee> employees=employeeService.findEmployees();
+		List<EmployeeDTO> employees=employeeService.findEmployees();
 		//adding into request scope
 		model.addAttribute("message", "Employee is deleted successfully email = "+email);
 		model.addAttribute("employees", employees);

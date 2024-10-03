@@ -1,23 +1,32 @@
 package com.boot.model;
 
-public class Employee {
-
+public class EmployeeDTO {
+	private Long id;
 	private String firstName;
 	private String lastName;
 	private String email;
 	private String password = "jill";
 	
-	public Employee() {
+	
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public EmployeeDTO() {
 	}
 	
-	public Employee(String email,String password) {
+	public EmployeeDTO(String email,String password) {
 		this.email=email;
 		this.password=password;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		Employee other = (Employee) obj;
+		EmployeeDTO other = (EmployeeDTO) obj;
 		return email.equalsIgnoreCase(other.getEmail()) && password.equalsIgnoreCase(other.getPassword());
 	}
 
@@ -29,7 +38,7 @@ public class Employee {
 		return password;
 	}
 
-	public Employee(String firstName, String lastName, String email) {
+	public EmployeeDTO(String firstName, String lastName, String email) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;

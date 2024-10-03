@@ -6,24 +6,32 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.boot.model.Employee;
+import com.boot.entity.Employee;
+import com.boot.entity.EmployeeRepository;
+import com.boot.model.EmployeeDTO;
 
 @Service
 public class EmployeeService {
 	
-	private  List<Employee> employees=new ArrayList<Employee>();
+	
+	@Autowired
+	private EmployeeRepository employeeRepository;
+	
+	private  List<EmployeeDTO> employees=new ArrayList<EmployeeDTO>();
 	
 	@PostConstruct
 	public void initialize() {
-		Employee employee1=new Employee("Abhay", "Singh","abhay@gmail.com");
-		Employee employee2=new Employee("Jhon", "Singh2","aewqy@gmail.com");
-		Employee employee3=new Employee("Abhay2", "Singh4","ewa@gmail.com");
-		Employee employee4=new Employee("Abhay3", "Singh5","ads@gmail.com");
-		Employee employee5=new Employee("Abhay4", "Singh3","jock@gmail.com");
-		Employee employee6=new Employee("Abhay5", "Singh5","abwqy@gmail.com");
-		Employee employee7=new Employee("Abhay6", "Singh6","abhaewq@gmail.com");
+		EmployeeDTO employee1=new EmployeeDTO("Abhay", "Singh","abhay@gmail.com");
+		EmployeeDTO employee2=new EmployeeDTO("Jhon", "Singh2","aewqy@gmail.com");
+		EmployeeDTO employee3=new EmployeeDTO("Abhay2", "Singh4","ewa@gmail.com");
+		EmployeeDTO employee4=new EmployeeDTO("Abhay3", "Singh5","ads@gmail.com");
+		EmployeeDTO employee5=new EmployeeDTO("Abhay4", "Singh3","jock@gmail.com");
+		EmployeeDTO employee6=new EmployeeDTO("Abhay5", "Singh5","abwqy@gmail.com");
+		EmployeeDTO employee7=new EmployeeDTO("Abhay6", "Singh6","abhaewq@gmail.com");
 		
 		employees.add(employee7);
 		employees.add(employee5);
@@ -35,19 +43,19 @@ public class EmployeeService {
 	}
 	
 	public  void deleteByEmail(String email) {
-		Iterator<Employee> iterator=employees.iterator();
+		Iterator<EmployeeDTO> iterator=employees.iterator();
 		while(iterator.hasNext()) {
-			Employee emp=iterator.next();
+			EmployeeDTO emp=iterator.next();
 			if(emp.getEmail().equalsIgnoreCase(email)) {
 				iterator.remove();
 			}
 		}
 	}
 	
-	public  Employee findEmployeeByEmail(String email){
-		Iterator<Employee> iterator=employees.iterator();
+	public  EmployeeDTO findEmployeeByEmail(String email){
+		Iterator<EmployeeDTO> iterator=employees.iterator();
 		while(iterator.hasNext()) {
-			Employee emp=iterator.next();
+			EmployeeDTO emp=iterator.next();
 			if(emp.getEmail().equalsIgnoreCase(email)) {
 				return emp;
 			}
@@ -55,18 +63,33 @@ public class EmployeeService {
 		return null;
 	}
 	
-	public  void addEmployee(Employee employee ) {
-		employees.add(employee);
+	public  void addEmployee(EmployeeDTO employee ) {
+		//employees.add(employee);
+		
+		Employee entity=new Employee();
+		BeanUtils.copyProperties(employee, entity);
+		employeeRepository.save(entity);
+		
 	}
 	
-	public  List<Employee> findEmployees(){
+	public  List<EmployeeDTO> findEmployees(){
+		 //FETCHING FROM DATA BASE
+		 List<Employee> employeeEntitList=employeeRepository.findAll();
+		 List<EmployeeDTO>  employeeDTOs=new ArrayList<EmployeeDTO>();
+		 for(Employee entity : employeeEntitList) {
+			 EmployeeDTO dto=new EmployeeDTO();
+			 BeanUtils.copyProperties(entity, dto);
+			 employeeDTOs.add(dto);
+		 }
+		 
+		 employees.addAll(employeeDTOs);
 		 return employees;
 	}
 	
-	public  void updateEmployee(Employee employee){
-		Iterator<Employee> iterator=employees.iterator();
+	public  void updateEmployee(EmployeeDTO employee){
+		Iterator<EmployeeDTO> iterator=employees.iterator();
 		while(iterator.hasNext()) {
-			Employee emp=iterator.next();
+			EmployeeDTO emp=iterator.next();
 			if(emp.getEmail().equalsIgnoreCase(employee.getEmail())) {
 				iterator.remove();
 				break;

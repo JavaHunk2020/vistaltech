@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.boot.model.Employee;
+import com.boot.model.EmployeeDTO;
 import com.boot.service.EmployeeService;
 
 @Controller
@@ -30,13 +30,13 @@ public class AuthController {
 			model.addAttribute("message", "Hey your email is not valid!");
 			return "auth";
 		}
-		Employee employee = new Employee(email, ppassword);
+		EmployeeDTO employee = new EmployeeDTO(email, ppassword);
 		if (employeeService.findEmployees().contains(employee)) {
 			model.addAttribute("message", "User is there, Thank you!");
 			// I am setting this messasge inside request scope
 			// so that I can pick it on jsp
 			// loading employee
-			List<Employee> employees = employeeService.findEmployees();
+			List<EmployeeDTO> employees = employeeService.findEmployees();
 			// adding into request scope
 			model.addAttribute("employees", employees);
 			return "home";
