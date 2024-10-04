@@ -20,7 +20,10 @@ public class AuthController {
 
 	// <form action="cauth" method="get">
 	@GetMapping({"/cauth","/"})
-	public String showAuthJsp() {
+	public String showAuthJsp(@RequestParam(required = false) String logout,Model model) {
+		if(logout!=null) {
+			model.addAttribute("message", "You have logged out successfully!");
+		}
 		return "auth"; // auth.jsp
 	}
 

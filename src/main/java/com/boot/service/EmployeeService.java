@@ -1,75 +1,47 @@
 package com.boot.service;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-
-import javax.annotation.PostConstruct;
+import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.boot.advice.EmployeeNotFoundExeception;
+import com.boot.dao.EmployeeRepository;
 import com.boot.entity.Employee;
-import com.boot.entity.EmployeeRepository;
 import com.boot.model.EmployeeDTO;
 
 @Service
 public class EmployeeService {
 	
-	
 	@Autowired
 	private EmployeeRepository employeeRepository;
 	
-	private  List<EmployeeDTO> employees=new ArrayList<EmployeeDTO>();
-	
-	@PostConstruct
-	public void initialize() {
-		EmployeeDTO employee1=new EmployeeDTO("Abhay", "Singh","abhay@gmail.com");
-		EmployeeDTO employee2=new EmployeeDTO("Jhon", "Singh2","aewqy@gmail.com");
-		EmployeeDTO employee3=new EmployeeDTO("Abhay2", "Singh4","ewa@gmail.com");
-		EmployeeDTO employee4=new EmployeeDTO("Abhay3", "Singh5","ads@gmail.com");
-		EmployeeDTO employee5=new EmployeeDTO("Abhay4", "Singh3","jock@gmail.com");
-		EmployeeDTO employee6=new EmployeeDTO("Abhay5", "Singh5","abwqy@gmail.com");
-		EmployeeDTO employee7=new EmployeeDTO("Abhay6", "Singh6","abhaewq@gmail.com");
-		
-		employees.add(employee7);
-		employees.add(employee5);
-		employees.add(employee1);
-		employees.add(employee2);
-		employees.add(employee3);
-		employees.add(employee4);
-		employees.add(employee6);
-	}
-	
 	public  void deleteByEmail(String email) {
-		Iterator<EmployeeDTO> iterator=employees.iterator();
-		while(iterator.hasNext()) {
-			EmployeeDTO emp=iterator.next();
-			if(emp.getEmail().equalsIgnoreCase(email)) {
-				iterator.remove();
-			}
-		}
+		employeeRepository.deleteByEmail(email);
 	}
 	
 	public  EmployeeDTO findEmployeeByEmail(String email){
-		Iterator<EmployeeDTO> iterator=employees.iterator();
-		while(iterator.hasNext()) {
-			EmployeeDTO emp=iterator.next();
-			if(emp.getEmail().equalsIgnoreCase(email)) {
-				return emp;
-			}
+		Optional<Employee> optional=employeeRepository.findByEmail(email);
+		if(optional.isPresent()) {
+			EmployeeDTO employeeDTO=new EmployeeDTO();
+			BeanUtils.copyProperties(optional.get(), employeeDTO);
+			return employeeDTO;
+		}else {
+			throw new EmployeeNotFoundExeception("It seems like , this employee does not exist.");
 		}
-		return null;
 	}
 	
+	/**
+	 *  This method is adding data inside database
+	 * @param employee
+	 */
 	public  void addEmployee(EmployeeDTO employee ) {
-		//employees.add(employee);
-		
 		Employee entity=new Employee();
 		BeanUtils.copyProperties(employee, entity);
 		employeeRepository.save(entity);
-		
 	}
 	
 	public  List<EmployeeDTO> findEmployees(){
@@ -81,20 +53,20 @@ public class EmployeeService {
 			 BeanUtils.copyProperties(entity, dto);
 			 employeeDTOs.add(dto);
 		 }
-		 
-		 employees.addAll(employeeDTOs);
-		 return employees;
+		 return employeeDTOs;
 	}
 	
 	public  void updateEmployee(EmployeeDTO employee){
-		Iterator<EmployeeDTO> iterator=employees.iterator();
-		while(iterator.hasNext()) {
-			EmployeeDTO emp=iterator.next();
-			if(emp.getEmail().equalsIgnoreCase(employee.getEmail())) {
-				iterator.remove();
-				break;
-			}
+		Employee  dbEmployee=employeeRepository.findByEmail(employee.getEmail()).get();
+		if(employee.getFirstName()!=null) {
+			dbEmployee.setFirstName(employee.getFirstName());
 		}
-		employees.add(employee);
+		if(employee.getLastName()!=null) {
+			dbEmployee.setLastName(employee.getLastName());
+		}
+		if(employee.getPassword()!=null) {
+			dbEmployee.setPassword(employee.getPassword());
+		}
+		employeeRepository.save(dbEmployee);
 	}
 }

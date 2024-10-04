@@ -23,7 +23,7 @@
 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEN001Q5AoJ2REqLeVFIjweNX-DXvXVA1FDA&s"/>
  
  <h2 style="background-color: fuchsia;">Home Page!!!
-  <a href="cauth">Logout</a>
+  <a href="cauth?logout=true">Logout</a>
  </h2>
  <hr/>
     

@@ -1,9 +1,18 @@
 package com.boot.model;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
 public class EmployeeDTO {
 	private Long id;
+	
+	@NotBlank(message = "Name cannot be blank")
+	@Size(min = 5, max = 30, message = "FirstName must be between 2 and 30 characters")
 	private String firstName;
 	private String lastName;
+	@NotBlank(message = "Email cannot be blank")
+	@Email(message = "Email should be valid")
 	private String email;
 	private String password = "jill";
 	
