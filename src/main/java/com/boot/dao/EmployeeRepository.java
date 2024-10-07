@@ -18,5 +18,7 @@ public interface EmployeeRepository  extends JpaRepository<Employee, Long> {
 	public void deleteByEmail(String email);
 	
 	public Optional<Employee> findByEmail(String email);
+	
+	boolean existsByEmail(String email);
 
 }
