@@ -1,5 +1,7 @@
 package com.boot.controller;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.boot.dao.EmployeeRepository;
 import com.boot.model.EmployeeDTO;
 import com.boot.service.EmployeeService;
 
@@ -21,6 +24,10 @@ public class SignupController {
 	
 	@Autowired
 	private EmployeeService employeeService;
+	
+	@Autowired
+	private EmployeeRepository employeeRepository;
+
 
 	//<form action="cauth" method="get">
 	@GetMapping("/signup")
@@ -34,6 +41,10 @@ public class SignupController {
         if (result.hasErrors()) {
         	model.addAttribute("message","Validation error.");
             return "auth";
+        }
+        if(employeeRepository.existsByEmail(employee.getEmail())) {
+        	model.addAttribute("message","email already exists");
+        	return "auth";
         }
 		employeeService.addEmployee(employee);
 		model.addAttribute("message","Hey! registration is done");
@@ -67,6 +78,22 @@ public class SignupController {
 		model.addAttribute("message", "Employee is deleted successfully email = "+email);
 		model.addAttribute("employees", employees);
 		return "home";  // auth.jsp
+	}
+	
+	@GetMapping("/sortByEmail")
+	public String sortEmployee(@RequestParam String orderBy,Model model) {
+	
+		 List<EmployeeDTO> employees=employeeService.findEmployees();
+		 //adding into request scope
+		 if(orderBy.equals("asc")) {
+		   model.addAttribute("corderBy", "desc"); 
+		   Collections.sort(employees,Comparator.comparing(EmployeeDTO::getEmail));
+		 }else {
+			 model.addAttribute("corderBy", "asc"); 
+			 Collections.sort(employees,Comparator.comparing(EmployeeDTO::getEmail).reversed());
+		 }
+		 model.addAttribute("employees", employees);
+		return "home";
 	}
 	
 }
