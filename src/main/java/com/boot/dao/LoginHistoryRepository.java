@@ -11,16 +11,10 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.boot.entity.Employee;
+import com.boot.entity.LoginHistory;
 
 @Repository
-public interface EmployeeRepository  extends JpaRepository<Employee, Long> {
+public interface LoginHistoryRepository  extends JpaRepository<LoginHistory, Long> {
 	
-	@Modifying
-	@Transactional
-	public void deleteByEmail(String email);
-	
-	public Optional<Employee> findByEmail(String email);
-	
-	public List<Employee> findAll(Sort sort);
 
 }

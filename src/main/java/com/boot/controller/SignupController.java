@@ -35,8 +35,13 @@ public class SignupController {
         	model.addAttribute("message","Validation error.");
             return "auth";
         }
-		employeeService.addEmployee(employee);
-		model.addAttribute("message","Hey! registration is done");
+        boolean status=employeeService.addEmployee(employee);
+        if(status==false) {
+        	model.addAttribute("message","Sorry , this email already exist into the database");	
+        	return "signup";  // signup.jsp
+        }else {
+        	model.addAttribute("message","Hey! registration is done");
+        }
 		return "auth";  // auth.jsp
 	}
 	
@@ -68,5 +73,16 @@ public class SignupController {
 		model.addAttribute("employees", employees);
 		return "home";  // auth.jsp
 	}
+	
+			
+	@GetMapping("/sortByEmail")
+	public String sortByEmailEmployee(@RequestParam(required = false,defaultValue = "asc") String orderBy,Model model) {
+		List<EmployeeDTO> employees=employeeService.findEmployeesSortByEmail("email",orderBy);
+		//adding into request scope
+		model.addAttribute("orderBy", orderBy.equalsIgnoreCase("asc")?"desc":"asc");
+		model.addAttribute("employees", employees);
+		return "home";  // auth.jsp
+	}
+	
 	
 }

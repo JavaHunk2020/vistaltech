@@ -21,7 +21,7 @@
  
  <h2 style="background-color: fuchsia;">Signup Page!!!</h2>
  <hr/>
- 
+ 	 <b style="color:red">${message}</b>
    <form action="signup" method="post">
      <div style="width: 50%">
 	   <h5>FirstName :</h5>

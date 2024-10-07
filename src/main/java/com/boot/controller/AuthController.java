@@ -34,7 +34,9 @@ public class AuthController {
 			return "auth";
 		}
 		EmployeeDTO employee = new EmployeeDTO(email, ppassword);
-		if (employeeService.findEmployees().contains(employee)) {
+		boolean status=employeeService.findEmployees().contains(employee);
+		if (status) {
+			employeeService.saveLogin(email);
 			model.addAttribute("message", "User is there, Thank you!");
 			// I am setting this messasge inside request scope
 			// so that I can pick it on jsp
