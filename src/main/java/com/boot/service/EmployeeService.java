@@ -10,6 +10,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.boot.advice.EmployeeNotFoundExeception;
 import com.boot.dao.EmployeeRepository;
@@ -26,6 +27,23 @@ public class EmployeeService {
 	
 	@Autowired
 	private LoginHistoryRepository loginHistoryRepository;
+	
+	@Transactional
+	public  void resetPasswordByEmail(String email,String password){
+		Optional<Employee> optional=employeeRepository.findByEmail(email);
+		if(optional.isPresent()) {
+			Employee employee=optional.get();
+			employee.setPassword(password);
+		}else {
+			throw new EmployeeNotFoundExeception("It seems like , this employee does not exist.");
+		}
+	}
+	
+	@Transactional
+	public  void updateLogoutTime(long llr) {
+		LoginHistory history=loginHistoryRepository.findById(llr).get();
+		history.setLogoutTime(new Timestamp(new Date().getTime()));
+	}
 	
 	public  void deleteByEmail(String email) {
 		employeeRepository.deleteByEmail(email);
@@ -101,11 +119,12 @@ public class EmployeeService {
 		employeeRepository.save(dbEmployee);
 	}
 	
-	public void saveLogin(String email) {
+	public long saveLogin(String email) {
 		Employee  dbEmployee=employeeRepository.findByEmail(email).get();
 		LoginHistory history=new LoginHistory();
 		history.setEmployee(dbEmployee);
 		history.setLoginTime(new Timestamp(new Date().getTime()));
-		loginHistoryRepository.save(history);
+		LoginHistory phistory=loginHistoryRepository.save(history);
+		return phistory.getId();
 	}
 }
