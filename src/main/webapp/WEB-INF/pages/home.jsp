@@ -38,6 +38,7 @@
             Email
         </a>
         </th>
+         <th>Photo</th>
          <th>Action</th>
       </tr>
     </thead>
@@ -58,6 +59,10 @@
         <td><%=employee.getFirstName()%></td>
         <td><%=employee.getLastName()%></td>
         <td><%=employee.getEmail() %></td>
+        <td>
+          <img src="image?email=<%=employee.getEmail()%>" style="height: 80px;"/>
+        
+        </td>
         <td>
           <a href="deleteEmployee?email=<%=employee.getEmail() %>">
               <button type="button" class="btn btn-danger">Del!</button>

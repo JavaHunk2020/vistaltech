@@ -22,7 +22,7 @@
  <h2 style="background-color: fuchsia;">Edit Signup Page!!!</h2>
  <hr/>
  
-   <form action="updateSignup" method="post">
+   <form action="updateSignup" method="post" enctype="multipart/form-data">
      <div style="width: 50%">
 	   <h5>FirstName :</h5>
 	   <input required="required" type="text" class="form-control" name="firstName" value="${employee.firstName}"/> 
@@ -34,6 +34,8 @@
 	   
 	   <input value="${employee.email}" readonly="readonly" required="required" type="email" class="form-control"  name="email"/> 
 	    <hr/>
+	     <input  type="file" class="form-control"  name="photo"/> 
+	     <hr/>
 	   <button type="submit" class="btn btn-success">Update!</button>
 	   </div>
    </form>

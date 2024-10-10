@@ -1,7 +1,13 @@
 package com.boot.controller;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +27,53 @@ public class SignupController {
 	
 	@Autowired
 	private EmployeeService employeeService;
+	
+	//image?email=amayea@gmail.com
+	@GetMapping("/image")
+	public void fetchImage(@RequestParam String email,HttpServletResponse response) throws IOException {
+		byte photo[] =employeeService.findPhotoByEmail(email);
+		response.setContentType("image/png");
+		if(photo!=null && photo.length>0) {
+			//MIME TYPE
+			response.getOutputStream().write(photo);//IOException
+		}else {
+			response.getOutputStream().write(this.convertUrlIntoByte());//IOException
+		}
+	}
+	
+	private byte[] convertUrlIntoByte() {
+		String imageUrl="https://static.vecteezy.com/system/resources/thumbnails/006/487/917/small_2x/man-avatar-icon-free-vector.jpg";
+		 byte[] byteArray= {};
+	    try {
+            // Step 1: Create a URL object
+            URL url = new URL(imageUrl);
+            // Step 2: Open a connection to the URL and get InputStream
+            InputStream inputStream = url.openStream();
+            // Step 3: Convert InputStream to ByteArrayOutputStream
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+
+            // Read bytes from input stream and write them to the output stream
+            while ((bytesRead = inputStream.read(buffer)) != -1) {
+                byteArrayOutputStream.write(buffer, 0, bytesRead);
+            }
+
+            // Step 4: Convert ByteArrayOutputStream to a byte array
+             byteArray = byteArrayOutputStream.toByteArray();
+            
+            // Optional: Close streams
+            inputStream.close();
+            byteArrayOutputStream.close();
+        } catch (MalformedURLException e) {
+            System.err.println("Invalid URL format: " + e.getMessage());
+        } catch (IOException e) {
+            System.err.println("I/O error: " + e.getMessage());
+        }
+	    return byteArray;
+	}
+
+
 
 	//<form action="cauth" method="get">
 	@GetMapping("/signup")

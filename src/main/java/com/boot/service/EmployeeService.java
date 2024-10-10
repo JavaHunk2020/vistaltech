@@ -1,5 +1,6 @@
 package com.boot.service;
 
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -27,6 +28,15 @@ public class EmployeeService {
 	
 	@Autowired
 	private LoginHistoryRepository loginHistoryRepository;
+	
+	public  byte[] findPhotoByEmail(String email) {
+		Optional<Employee> optional=employeeRepository.findByEmail(email);
+		if(optional.isPresent()) {
+			return optional.get().getPhoto();
+		}else {
+			throw new EmployeeNotFoundExeception("It seems like , this employee does not exist.");
+		}
+	}
 	
 	@Transactional
 	public  void resetPasswordByEmail(String email,String password){
@@ -70,7 +80,12 @@ public class EmployeeService {
 			return false;
 		}
 		Employee entity=new Employee();
-		BeanUtils.copyProperties(employee, entity);
+		BeanUtils.copyProperties(employee, entity,new String[] {"photo"});
+		try {
+			entity.setPhoto(employee.getPhoto().getBytes());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		employeeRepository.save(entity);
 		return true;
 	}
@@ -115,6 +130,13 @@ public class EmployeeService {
 		}
 		if(employee.getPassword()!=null) {
 			dbEmployee.setPassword(employee.getPassword());
+		}
+		if(employee.getPhoto()!=null && employee.getPhoto().getSize()>0) {
+			try {
+				dbEmployee.setPhoto(employee.getPhoto().getBytes());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		employeeRepository.save(dbEmployee);
 	}

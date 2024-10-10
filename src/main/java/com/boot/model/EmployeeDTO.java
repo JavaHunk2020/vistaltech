@@ -4,6 +4,8 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class EmployeeDTO {
 	private Long id;
 	
@@ -15,8 +17,16 @@ public class EmployeeDTO {
 	@Email(message = "Email should be valid")
 	private String email;
 	private String password = "jill";
+	private MultipartFile photo;
 	
-	
+	public MultipartFile getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(MultipartFile photo) {
+		this.photo = photo;
+	}
+
 	public Long getId() {
 		return id;
 	}

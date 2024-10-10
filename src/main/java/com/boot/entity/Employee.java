@@ -1,5 +1,6 @@
 package com.boot.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -17,6 +18,16 @@ public class Employee {
 	private String lastName;
 	private String email;
 	private String password;
+	@Column(columnDefinition = "longblob")
+	private byte[] photo;
+
+	public byte[] getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(byte[] photo) {
+		this.photo = photo;
+	}
 
 	public Long getId() {
 		return id;
