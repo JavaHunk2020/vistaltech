@@ -25,6 +25,7 @@
  <hr/>
     
     <h1>Hey!! you are not allowed to access this resource!!!!!!!!!</h1>
+    <span style="color:red;font-size: 18px;font-weight: bold;">${errorMessage}</span>
  </div>
 </body>
 </html>
