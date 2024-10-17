@@ -17,6 +17,15 @@ public class People {
 	private String email;
 	private String name;
 	private String gender;
+	
+
+	public Long getPid() {
+		return pid;
+	}
+
+	public void setPid(Long pid) {
+		this.pid = pid;
+	}
 
 	public String getEmail() {
 		return email;
