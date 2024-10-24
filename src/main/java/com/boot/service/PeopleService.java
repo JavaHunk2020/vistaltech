@@ -2,11 +2,11 @@ package com.boot.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.boot.advice.ResourceNotFoundExeception;
 import com.boot.dao.PeopleRepository;
@@ -22,6 +22,24 @@ public class PeopleService {
 	public PeopleService(PeopleRepository peopleRepository){
 		this.peopleRepository=peopleRepository;
 	}
+	
+	@Transactional
+	public PeopleDTO update(PeopleDTO peopleDTO) {
+		//check records
+		People people=peopleRepository.findById(peopleDTO.getPid()).
+				orElseThrow(()->new ResourceNotFoundExeception("Hey this people does not exist"));
+		BeanUtils.copyProperties(peopleDTO, people);
+		return peopleDTO;
+	}
+	
+	public PeopleDTO ssave(PeopleDTO peopleDTO) {
+		People people=new People();
+		BeanUtils.copyProperties(peopleDTO, people);
+		People dPeople=peopleRepository.save(people);
+		peopleDTO.setPid(dPeople.getPid());
+		return peopleDTO;
+	}
+	
 	
 	public PeopleDTO findById(long pid) {
 		People people=peopleRepository.findById(pid).

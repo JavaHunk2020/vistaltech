@@ -8,6 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,6 +26,18 @@ public class PeopleRestContoller {
 	@Autowired
 	private PeopleService peopleService;
 	
+	
+	@PutMapping("/peoples")
+	public ResponseEntity<PeopleDTO> updatePeoples(@RequestBody PeopleDTO peopleDTO){
+		 PeopleDTO rpeopleDTO=peopleService.update(peopleDTO);
+		 return new ResponseEntity<>(rpeopleDTO,HttpStatus.OK);
+	}
+	
+	@PostMapping("/peoples")
+	public ResponseEntity<PeopleDTO> postPeoples(@RequestBody PeopleDTO peopleDTO){
+		 PeopleDTO rpeopleDTO=peopleService.ssave(peopleDTO);
+		 return new ResponseEntity<>(rpeopleDTO,HttpStatus.CREATED);
+	}
 	
 	@DeleteMapping("/peoples/{pid}")
 	public ResponseEntity<Void> deletePeople(@PathVariable long pid){
