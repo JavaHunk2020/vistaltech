@@ -1,11 +1,12 @@
 package com.boot.model;
 
+import java.util.function.Consumer;
+
 public class PeopleDTO {
 	private Long pid;
 	private String email;
 	private String name;
 	private String gender;
-	
 	public Long getPid() {
 		return pid;
 	}
