@@ -36,7 +36,18 @@ public class LoginRestController {
 			claims.put("company", "AbcTech");
 			claims.put("Issuer", "agora.com");
 			claims.put("scopes", List.of("ADMIN"));
-			
+			String token= Jwts.builder().
+					setSubject(loginDTO.getUsername())
+					.addClaims(claims)
+					.setIssuedAt(new Date())
+					.setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
+					.signWith(SignatureAlgorithm.HS512, jwtSecret).compact();
+			return new ResponseEntity<Map<String,Object>>(Map.of("Authorization",token,"username",loginDTO.getUsername()),HttpStatus.UNAUTHORIZED);
+		}else if(loginDTO.getUsername().equalsIgnoreCase("mack@gmail.com") && loginDTO.getPassword().equalsIgnoreCase("test")) {
+			Map<String, Object> claims = new HashMap<>();
+			claims.put("company", "AbcTech");
+			claims.put("Issuer", "agora.com");
+			claims.put("scopes", List.of("CUSTOMER"));
 			String token= Jwts.builder().
 					setSubject(loginDTO.getUsername())
 					.addClaims(claims)
