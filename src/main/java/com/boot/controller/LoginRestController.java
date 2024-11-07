@@ -5,15 +5,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.boot.model.EmployeeDTO;
 import com.boot.model.LoginDTO;
+import com.boot.service.EmployeeService;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -26,7 +30,20 @@ public class LoginRestController {
 	@Value("${jwt.secret.key:ABUE87%&$&##@)@(&@*^@^@@@}")
 	private String jwtSecret;
 
+
 	private int jwtExpirationMs = 1800000;
+	
+	@Autowired
+	private EmployeeService employeeService;
+	
+	@CrossOrigin(origins = "http://localhost:4200")
+	@PostMapping("/signup")
+	public ResponseEntity<Map<String,Object>> postMapping(@RequestBody  EmployeeDTO employee) {
+		 System.out.println("________________"+employee);
+         employeeService.addEmployee(employee);
+         return new ResponseEntity<Map<String,Object>>(Map.of("message","Signup is done!!"),HttpStatus.CREATED);
+	}
+	
 	
 	@PostMapping("/slogin")
 	public ResponseEntity<Map<String,Object>> authAndGenToken(@RequestBody LoginDTO loginDTO){

@@ -26,6 +26,8 @@ public class AuthController {
 	
 	@Autowired
 	private EmailService emailService;
+	
+	
 
 	// <form action="cauth" method="get">
 	@GetMapping({"/cauth","/"})
