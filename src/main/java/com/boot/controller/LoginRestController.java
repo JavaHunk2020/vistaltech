@@ -5,11 +5,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.websocket.server.PathParam;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,12 +41,28 @@ public class LoginRestController {
 	@Autowired
 	private EmployeeService employeeService;
 	
+	
+	@CrossOrigin(origins = "http://localhost:4200")
+	@DeleteMapping("/signups/{id}")
+	public ResponseEntity<Void> deleteEmployee(@PathVariable long id) {
+		 employeeService.deleteById(id);
+         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	}
+	
+	//access-control-allow-origin:
+	//http://localhost:4200
+	@CrossOrigin(origins = "http://localhost:4200")
+	@GetMapping("/signups")
+	public ResponseEntity<List<EmployeeDTO>> showAll() {
+         return new ResponseEntity<>(employeeService.findEmployees(),HttpStatus.OK);
+	}
+	
 	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping("/signup")
 	public ResponseEntity<Map<String,Object>> postMapping(@RequestBody  EmployeeDTO employee) {
 		 System.out.println("________________"+employee);
-         employeeService.addEmployee(employee);
-         return new ResponseEntity<Map<String,Object>>(Map.of("message","Signup is done!!"),HttpStatus.CREATED);
+         long id=employeeService.addEmployee(employee);
+         return new ResponseEntity<Map<String,Object>>(Map.of("message","Signup is done!!","id",id),HttpStatus.CREATED);
 	}
 	
 	

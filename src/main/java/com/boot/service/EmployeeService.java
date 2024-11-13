@@ -57,6 +57,10 @@ public class EmployeeService {
 		history.setLogoutTime(new Timestamp(new Date().getTime()));
 	}
 	
+	public  void deleteById(long id){
+		employeeRepository.deleteById(id);
+	}
+	
 	public  void deleteByEmail(String email) {
 		employeeRepository.deleteByEmail(email);
 	}
@@ -76,20 +80,20 @@ public class EmployeeService {
 	 *  This method is adding data inside database
 	 * @param employee
 	 */
-	public  boolean addEmployee(EmployeeDTO employee ) {
+	public  long addEmployee(EmployeeDTO employee ) {
 		Optional<Employee> optional=employeeRepository.findByEmail(employee.getEmail());
 		if(optional.isPresent()) {
-			return false;
+			return 0;
 		}
 		Employee entity=new Employee();
 		BeanUtils.copyProperties(employee, entity,new String[] {"photo"});
 		try {
+			if(employee.getPhoto()!=null)
 			entity.setPhoto(employee.getPhoto().getBytes());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		employeeRepository.save(entity);
-		return true;
+		return employeeRepository.save(entity).getId();
 	}
 	
 	

@@ -88,8 +88,8 @@ public class SignupController {
         	model.addAttribute("message","Validation error.");
             return "auth";
         }
-        boolean status=employeeService.addEmployee(employee);
-        if(status==false) {
+        long status=employeeService.addEmployee(employee);
+        if(status==0) {
         	model.addAttribute("message","Sorry , this email already exist into the database");	
         	return "signup";  // signup.jsp
         }else {

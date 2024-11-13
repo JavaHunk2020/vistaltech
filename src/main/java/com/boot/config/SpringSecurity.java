@@ -27,7 +27,7 @@ public class SpringSecurity {
 				.and()
 				.addFilterBefore(createBean(), UsernamePasswordAuthenticationFilter.class)
 				.authorizeRequests()
-				.antMatchers(new String[]{"/v1/slogin**","/v1/peoples","/v1/signup"})
+				.antMatchers(new String[]{"/v1/slogin**","/v1/peoples","/v1/signup","/v1/signups/**"})
 				.permitAll()
 				.anyRequest().authenticated();
 		return http.build();
