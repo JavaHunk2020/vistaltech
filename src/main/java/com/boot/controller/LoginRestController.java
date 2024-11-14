@@ -43,6 +43,22 @@ public class LoginRestController {
 	
 	
 	@CrossOrigin(origins = "http://localhost:4200")
+	@PostMapping("/user/login")
+	public ResponseEntity<Map<String,Object>> authUser(@RequestBody  EmployeeDTO employee) {
+		 System.out.println("________________"+employee);
+		 try {
+		 EmployeeDTO employeeDTO=employeeService.findEmployeeByEmail(employee.getEmail());
+		  if(employeeDTO.getPassword().equalsIgnoreCase(employee.getPassword())) {
+			  return new ResponseEntity<Map<String,Object>>(Map.of("message","login is done!!"),HttpStatus.OK);	  
+		  }
+		 }catch (Exception e) {
+			 	System.out.println(e.getMessage());
+		 }
+	  return new ResponseEntity<Map<String,Object>>(Map.of("message","login is failed!!"),HttpStatus.UNAUTHORIZED);	  
+	}
+	
+	
+	@CrossOrigin(origins = "http://localhost:4200")
 	@DeleteMapping("/signups/{id}")
 	public ResponseEntity<Void> deleteEmployee(@PathVariable long id) {
 		 employeeService.deleteById(id);
